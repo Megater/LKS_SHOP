@@ -1,30 +1,26 @@
 import type { Metadata } from "next";
+import Navbar from "@/app/components/Navbar";
+import { teko } from "@/app/fonts";
 import "./globals.css";
-import Navbar from '@/app/components/Navbar';
-import { Teko } from "next/font/google";
-import { renderToWebFlightStream } from "next/dist/server/app-render/stream-ops.web";
-
-const teko = Teko({
-  subsets:['latin'],
-  weight:'400'
-})
 
 export const metadata: Metadata = {
   title: "LKS",
   description: "Lks-desc",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html
       lang="pl"
-      className={`${teko.className} ${teko.className} h-full antialiased`}
+      className={`${teko.className} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-      <Navbar/>
-
-      {children}
-
+      <body className="min-h-full flex flex-col bg-white">
+        <Navbar />
+        {children}
       </body>
     </html>
   );
