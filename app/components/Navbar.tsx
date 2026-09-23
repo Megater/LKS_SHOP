@@ -18,17 +18,17 @@ export default function Navbar() {
               <Image
                 src="/herb.png"
                 alt="Herb LKS Pniewy"
-                width={48}
-                height={48}
+                width={124}
+                height={124}
                 priority
-                className="h-12 w-12 object-contain"        
+                className="h-12 md:h-18 w-12 md:w-18 object-contain"        
               />
             </Link>
           </div>
 
           {/* Kolumna 2: Środkowa (Napis LKS PNIEWY idealnie na środku) */}
           <div className="flex items-center ml-4 justify-center">
-            <Link href="/" className="flex items-center gap-1.5 text-3xl sm:text-xl font-extrabold  tracking-wider">
+            <Link href="/" className="flex items-center gap-1.5 text-3xl sm:text-xl md:text-5xl font-extrabold  tracking-wider">
               <span className="text-green-600">LKS</span>
               <span className="text-red-600">PNIEWY</span>
             </Link>
@@ -44,7 +44,7 @@ export default function Navbar() {
               <svg
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="h-6 w-6 text-black"
+                className="h-6 md:h-12 w-6 md:w-12 text-black"
               >
                 <path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z" />
                 <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
