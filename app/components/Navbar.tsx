@@ -26,6 +26,11 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Jeśli jesteśmy w panelu Sanity Studio, nie renderuj Navbara
+  if (pathname?.startsWith('/studio')) {
+    return null;
+  }
+
   return (
     <header className={`${inder.className} sticky top-0 z-50 w-full bg-white shadow-sm transition-all`}>
       {/* 1. TWÓJ ORYGINALNY NAVBAR (pozostaje na stałe na samej górze) */}

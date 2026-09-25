@@ -1,52 +1,122 @@
 'use client';
 
-import { useState } from 'react';
-import { notFound, useParams, useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { PRODUCTS } from '@/app/data/products';
+import { createClient } from 'next-sanity';
 import { inder } from '@/app/fonts';
 import { useCart } from '@/app/context/CartContext';
+
+// Klient Sanity
+const client = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  apiVersion: '2024-01-01',
+  useCdn: false,
+});
+
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  category: string;
+  tag?: string;
+  images: string[];
+  sizes?: string[];
+  description?: string;
+}
 
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const product = PRODUCTS.find((p) => p.id === params.id);
   const { addToCart } = useCart();
 
-  if (!product) {
-    notFound();
-  }
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Stan wybranego zdjęcia głównego
-  const [selectedImage, setSelectedImage] = useState(product.images[0]);
-  // Stan wybranego rozmiaru
-  const [selectedSize, setSelectedSize] = useState(product.sizes ? product.sizes[0] : '');
-  // Stan uwag do zamówienia
+  // Stany formularza
+  const [selectedImage, setSelectedImage] = useState<string>('');
+  const [selectedSize, setSelectedSize] = useState<string>('');
   const [notes, setNotes] = useState('');
-  // Stan widoczności okna potwierdzenia
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  useEffect(() => {
+    async function fetchProduct() {
+      if (!params?.id) return;
+
+      try {
+        const query = `*[_type == "product" && _id == $id][0] {
+          "id": _id,
+          name,
+          price,
+          category,
+          tag,
+          "images": images[].asset->url,
+          sizes,
+          description
+        }`;
+        
+        const data = await client.fetch(query, { id: params.id });
+        if (data) {
+          setProduct(data);
+          if (data.images && data.images.length > 0) {
+            setSelectedImage(data.images[0]);
+          }
+          if (data.sizes && data.sizes.length > 0) {
+            setSelectedSize(data.sizes[0]);
+          }
+        }
+      } catch (error) {
+        console.error('Błąd pobierania produktu:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProduct();
+  }, [params?.id]);
+
   const handleAddToCart = () => {
+    if (!product) return;
+
     const orderItem = {
       productId: product.id,
       name: product.name,
       price: product.price,
       size: selectedSize || undefined,
       notes: notes || undefined,
-      image: selectedImage,
+      image: selectedImage || (product.images ? product.images[0] : ''),
     };
 
     addToCart(orderItem);
-    console.log('Dodano do koszyka:', orderItem);
     setIsModalOpen(true);
   };
+
+  if (loading) {
+    return (
+      <main className={`${inder.className} min-h-screen bg-white py-24 text-center text-neutral-400 font-bold uppercase tracking-widest text-sm`}>
+        Ładowanie produktu...
+      </main>
+    );
+  }
+
+  if (!product) {
+    return (
+      <main className={`${inder.className} min-h-screen bg-white py-24 text-center`}>
+        <h2 className="text-xl font-bold uppercase text-neutral-900 mb-4">Nie znaleziono produktu</h2>
+        <Link href="/sklep" className="text-sm uppercase font-bold text-green-600 hover:underline">
+          ← Wróć do sklepu
+        </Link>
+      </main>
+    );
+  }
 
   return (
     <main className={`${inder.className} min-h-screen bg-white pb-24 pt-8 text-neutral-900`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
-        {/* Okruszki / Powrót */}
+        {/* Nawigacja okruszkowa / Powrót */}
         <nav className="mb-6 flex items-center gap-2 text-sm text-neutral-500 uppercase tracking-wider">
           <Link href="/sklep" className="hover:text-green-600 transition-colors">
             ← Wróć do sklepu
@@ -57,10 +127,9 @@ export default function ProductDetailPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
           
-          {/* LEWA KOLUMNA: GALERIA ZDJĘĆ */}
+          {/* GALERIA ZDJĘĆ */}
           <div className="flex flex-col-reverse sm:flex-row gap-4">
-            {/* Miniaturki zdjęć */}
-            {product.images.length > 1 && (
+            {product.images && product.images.length > 1 && (
               <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-y-visible">
                 {product.images.map((img, idx) => (
                   <button
@@ -84,25 +153,28 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            {/* Główne powiększone zdjęcie */}
             <div className="relative aspect-square w-full flex-grow border border-neutral-200 bg-neutral-50 flex items-center justify-center p-8">
               {product.tag && (
                 <span className="absolute top-4 left-4 z-10 bg-green-600 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
                   {product.tag}
                 </span>
               )}
-              <Image
-                src={selectedImage}
-                alt={product.name}
-                width={450}
-                height={450}
-                className="object-contain max-h-full transition-all"
-                priority
-              />
+              {selectedImage ? (
+                <Image
+                  src={selectedImage}
+                  alt={product.name}
+                  width={450}
+                  height={450}
+                  className="object-contain max-h-full transition-all"
+                  priority
+                />
+              ) : (
+                <div className="text-neutral-300 text-sm font-bold uppercase">Brak zdjęcia</div>
+              )}
             </div>
           </div>
 
-          {/* PRAWA KOLUMNA: SZCZEGÓŁY, ROZMIARY, UWAGI */}
+          {/* SZCZEGÓŁY PRODUKTU, WYBÓR ROZMIARU I UWAGI */}
           <div className="flex flex-col justify-start">
             <span className="text-xs font-bold uppercase tracking-widest text-green-600">
               {product.category}
@@ -115,14 +187,16 @@ export default function ProductDetailPage() {
               {product.price.toFixed(2)} zł
             </p>
 
-            <div className="my-6 border-t border-b border-neutral-200 py-4">
-              <p className="text-sm leading-relaxed text-neutral-600">
-                {product.description}
-              </p>
-            </div>
+            {product.description && (
+              <div className="my-6 border-t border-b border-neutral-200 py-4">
+                <p className="text-sm leading-relaxed text-neutral-600 whitespace-pre-line">
+                  {product.description}
+                </p>
+              </div>
+            )}
 
-            {/* WYBÓR ROZMIARU (jeśli produkt posiada rozmiary) */}
-            {product.sizes && (
+            {/* Wybór rozmiaru */}
+            {product.sizes && product.sizes.length > 0 && (
               <div className="mb-6">
                 <label className="block text-xs font-bold uppercase tracking-widest text-neutral-700 mb-2">
                   Wybierz rozmiar: <span className="text-neutral-900">{selectedSize}</span>
@@ -146,7 +220,7 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            {/* POLE NA UWAGI (np. nadruk na koszulce, imię kibica) */}
+            {/* Uwagi */}
             <div className="mb-6">
               <label
                 htmlFor="order-notes"
@@ -164,7 +238,7 @@ export default function ProductDetailPage() {
               />
             </div>
 
-            {/* PRZYCISK DODANIA DO KOSZYKA */}
+            {/* Przycisk dodawania */}
             <button
               type="button"
               onClick={handleAddToCart}
@@ -175,10 +249,9 @@ export default function ProductDetailPage() {
           </div>
 
         </div>
-
       </div>
 
-      {/* OKNO MODALNE (POTWIERDZENIE DODANIA) */}
+      {/* MODAL POTWIERDZENIA */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
           <div className="relative w-full max-w-md border border-neutral-200 bg-white p-6 shadow-2xl">
@@ -193,14 +266,16 @@ export default function ProductDetailPage() {
             </div>
 
             <div className="my-5 flex items-center gap-4 bg-neutral-50 p-3 border border-neutral-100">
-              <div className="relative h-16 w-16 shrink-0 bg-white border border-neutral-200 p-1">
-                <Image
-                  src={selectedImage}
-                  alt={product.name}
-                  fill
-                  className="object-contain p-1"
-                />
-              </div>
+              {selectedImage && (
+                <div className="relative h-16 w-16 shrink-0 bg-white border border-neutral-200 p-1">
+                  <Image
+                    src={selectedImage}
+                    alt={product.name}
+                    fill
+                    className="object-contain p-1"
+                  />
+                </div>
+              )}
               <div className="overflow-hidden">
                 <p className="font-bold text-neutral-900 truncate">{product.name}</p>
                 {selectedSize && (
