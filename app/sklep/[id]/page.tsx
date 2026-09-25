@@ -128,18 +128,18 @@ export default function ProductDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
           
           {/* GALERIA ZDJĘĆ */}
-          <div className="flex flex-col-reverse sm:flex-row gap-4">
+          <div className="flex flex-col-reverse sm:flex-row gap-4 items-start">
             {product.images && product.images.length > 1 && (
-              <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-y-visible">
+              <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-y-auto w-full sm:w-auto shrink-0 pb-2 sm:pb-0">
                 {product.images.map((img, idx) => (
                   <button
                     key={idx}
                     type="button"
                     onClick={() => setSelectedImage(img)}
-                    className={`relative h-20 w-20 flex-shrink-0 border p-2 transition-all ${
+                    className={`relative h-20 w-20 shrink-0 border p-2 transition-all ${
                       selectedImage === img
-                        ? 'border-neutral-900 ring-1 ring-neutral-900'
-                        : 'border-neutral-200 hover:border-neutral-400 bg-neutral-50'
+                        ? 'border-green-600 ring-green-600 bg-white'
+                        : 'border-neutral-200 bg-neutral-50 hover:bg-green-600/10 hover:border-green-600'
                     }`}
                   >
                     <Image
