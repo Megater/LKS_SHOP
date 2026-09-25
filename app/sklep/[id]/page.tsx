@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { notFound, useParams } from 'next/navigation';
+import { notFound, useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PRODUCTS } from '@/app/data/products';
@@ -10,9 +10,9 @@ import { useCart } from '@/app/context/CartContext';
 
 export default function ProductDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const product = PRODUCTS.find((p) => p.id === params.id);
-  const {addToCart} = useCart();
-  
+  const { addToCart } = useCart();
 
   if (!product) {
     notFound();
@@ -24,20 +24,22 @@ export default function ProductDetailPage() {
   const [selectedSize, setSelectedSize] = useState(product.sizes ? product.sizes[0] : '');
   // Stan uwag do zamówienia
   const [notes, setNotes] = useState('');
+  // Stan widoczności okna potwierdzenia
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAddToCart = () => {
     const orderItem = {
       productId: product.id,
       name: product.name,
       price: product.price,
-      size: selectedSize,
-      notes: notes,
+      size: selectedSize || undefined,
+      notes: notes || undefined,
       image: selectedImage,
     };
 
-    
     addToCart(orderItem);
     console.log('Dodano do koszyka:', orderItem);
+    setIsModalOpen(true);
   };
 
   return (
@@ -175,6 +177,64 @@ export default function ProductDetailPage() {
         </div>
 
       </div>
+
+      {/* OKNO MODALNE (POTWIERDZENIE DODANIA) */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="relative w-full max-w-md border border-neutral-200 bg-white p-6 shadow-2xl">
+            
+            <div className="flex items-center gap-2 border-b border-neutral-200 pb-3 text-green-600">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+              </svg>
+              <h3 className="text-lg font-extrabold uppercase tracking-wide text-neutral-900">
+                Dodano do koszyka!
+              </h3>
+            </div>
+
+            <div className="my-5 flex items-center gap-4 bg-neutral-50 p-3 border border-neutral-100">
+              <div className="relative h-16 w-16 shrink-0 bg-white border border-neutral-200 p-1">
+                <Image
+                  src={selectedImage}
+                  alt={product.name}
+                  fill
+                  className="object-contain p-1"
+                />
+              </div>
+              <div className="overflow-hidden">
+                <p className="font-bold text-neutral-900 truncate">{product.name}</p>
+                {selectedSize && (
+                  <p className="text-xs uppercase text-neutral-500">
+                    Rozmiar: <span className="font-bold text-neutral-800">{selectedSize}</span>
+                  </p>
+                )}
+                <p className="text-sm font-extrabold text-neutral-900 mt-0.5">
+                  {product.price.toFixed(2)} zł
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="w-full border border-neutral-300 py-3 text-sm font-bold uppercase tracking-wider text-neutral-800 transition-colors hover:bg-neutral-100 active:scale-95"
+              >
+                Kontynuuj zakupy
+              </button>
+
+              <button
+                type="button"
+                onClick={() => router.push('/koszyk')}
+                className="w-full bg-neutral-900 py-3 text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-green-600 active:scale-95"
+              >
+                Przejdź do koszyka
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
     </main>
   );
 }
