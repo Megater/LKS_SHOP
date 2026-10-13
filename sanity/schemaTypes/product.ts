@@ -31,6 +31,20 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'targetGroup',
+      title: 'Dla kogo (Grupa docelowa)',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Zawodnik', value: 'zawodnik' },
+          { title: 'Rodzic', value: 'rodzic' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'zawodnik',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: 'tag',
       title: 'Etykieta (np. Nowość / Bestseller)',
       type: 'string',

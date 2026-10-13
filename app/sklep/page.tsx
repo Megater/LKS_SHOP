@@ -11,15 +11,16 @@ const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01',
-  useCdn: false, // false podczas tworzenia gwarantuje natychmiastowe odświeżanie po publikacji
+  useCdn: false,
 });
 
-// Typ produktu z bazy Sanity
+// Typ produktu z bazy Sanity z dodanym polem targetGroup
 interface Product {
   id: string;
   name: string;
   price: number;
   category: string;
+  targetGroup?: 'zawodnik' | 'rodzic';
   tag?: string;
   images: string[];
 }
@@ -28,17 +29,21 @@ const CATEGORIES = ['Wszystko', 'Koszulki', 'Bluzy', 'Akcesoria'];
 
 export default function SklepPage() {
   const [products, setProducts] = useState<Product[]>([]);
+  // Domyślnie otwarta zakładka "Zawodnik"
+  const [activeTab, setActiveTab] = useState<'zawodnik' | 'rodzic'>('zawodnik');
   const [activeCategory, setActiveCategory] = useState('Wszystko');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchProducts() {
       try {
+        // Dodano targetGroup do zapytania GROQ
         const query = `*[_type == "product"] | order(_createdAt desc) {
           "id": _id,
           name,
           price,
           category,
+          targetGroup,
           tag,
           "images": images[].asset->url
         }`;
@@ -54,25 +59,61 @@ export default function SklepPage() {
     fetchProducts();
   }, []);
 
-  const filteredProducts =
-    activeCategory === 'Wszystko'
-      ? products
-      : products.filter((p) => p.category === activeCategory);
+  // Filtrowanie: najpierw zakładka (Zawodnik / Rodzic), a potem kategoria (Koszulki, Bluzy itd.)
+  const filteredProducts = products.filter((product) => {
+    const productTarget = product.targetGroup || 'zawodnik';
+    const matchesTab = productTarget === activeTab;
+    const matchesCategory =
+      activeCategory === 'Wszystko' ? true : product.category === activeCategory;
+
+    return matchesTab && matchesCategory;
+  });
 
   return (
     <main className={`${inder.className} min-h-screen bg-white pb-24 pt-8`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
-        {/* Górna belka: Tytuł i filtry */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-neutral-200 pb-6 gap-4">
-          <div>
-            <h1 className="text-3xl sm:text-5xl font-extrabold uppercase tracking-tight text-neutral-900 mt-1">
-              Sklep Klubowy
-            </h1>
+        {/* Górna belka: Tytuł */}
+        <div className="border-b border-neutral-200 pb-6">
+          <h1 className="text-3xl sm:text-5xl font-extrabold uppercase tracking-tight text-neutral-900 mt-1">
+            Sklep Klubowy
+          </h1>
+
+          {/* GŁÓWNY PRZEŁĄCZNIK ZAKŁADEK: ZAWODNIK / RODZIC */}
+          <div className="mt-8 flex border-b border-neutral-200 gap-8">
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab('zawodnik');
+                setActiveCategory('Wszystko');
+              }}
+              className={`pb-3 text-lg sm:text-xl font-extrabold uppercase tracking-wider transition-all relative ${
+                activeTab === 'zawodnik'
+                  ? 'text-red-600 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-red-600'
+                  : 'text-neutral-400 hover:text-neutral-700'
+              }`}
+            >
+              Zawodnik
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab('rodzic');
+                setActiveCategory('Wszystko');
+              }}
+              className={`pb-3 text-lg sm:text-xl font-extrabold uppercase tracking-wider transition-all relative ${
+                activeTab === 'rodzic'
+                  ? 'text-red-600 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-red-600'
+                  : 'text-neutral-400 hover:text-neutral-700'
+              }`}
+            >
+              Rodzic
+            </button>
           </div>
 
-          {/* Przyciski kategorii */}
-          <div className="flex flex-wrap gap-2">
+          {/* Podrzędne przyciski kategorii */}
+          <div className="flex flex-wrap gap-2 mt-6">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
@@ -80,8 +121,8 @@ export default function SklepPage() {
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-1.5 text-sm sm:text-base font-bold uppercase transition-all rounded-sm ${
                   activeCategory === cat
-                    ? 'bg-neutral-900 text-white'
-                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                    ? 'bg-green-600 text-white'
+                    : 'bg-white text-neutral-800 hover:bg-green-600/10 hover:text-green-700'
                 }`}
               >
                 {cat}
@@ -97,7 +138,7 @@ export default function SklepPage() {
           </div>
         ) : filteredProducts.length === 0 ? (
           <div className="py-24 text-center text-neutral-400 font-bold uppercase tracking-widest text-sm">
-            Brak produktów w tej kategorii
+            Brak produktów w tej sekcji
           </div>
         ) : (
           /* Siatka z produktami */
@@ -114,7 +155,7 @@ export default function SklepPage() {
                   </span>
                 )}
 
-                {/* KROK 3: Link do podstrony produktu (obejmuje zdjęcie oraz nazwę) */}
+                {/* Link do podstrony produktu */}
                 <Link href={`/sklep/${product.id}`} className="block flex-grow cursor-pointer">
                   {/* Zdjęcie produktu */}
                   <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden bg-neutral-50 mb-4 p-8">
@@ -142,7 +183,7 @@ export default function SklepPage() {
                   </div>
                 </Link>
 
-                {/* Dolny pasek: Cena i przycisk "Zobacz" */}
+                {/* Dolny pasek: Cena i przycisk */}
                 <div className="mt-4 flex items-center justify-between pt-3 border-t border-neutral-100">
                   <span className="text-xl sm:text-2xl font-black text-neutral-900">
                     {product.price.toFixed(2)} zł
