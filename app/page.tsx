@@ -19,7 +19,6 @@ import {
   Layers,
   Smartphone,
   Flame,
-  Camera,
 } from 'lucide-react';
 
 export default function Home() {
@@ -250,93 +249,87 @@ export default function Home() {
     },
   ];
 
-  const galleryPhotos = [
-    {
-      src: '/galeria/IMG20251030160618.jpg',
-      alt: 'Tęcza nad stadionem LKS Pniewy w Załężu Dużym',
-      title: 'Tęcza nad stadionem w Załężu Dużym',
-      tag: 'Nasza Baza',
-      desc: 'Niezwykły widok podczas jesiennego treningu młodzieży LKS Pniewy na płycie głównej.',
-      featured: true,
-    },
-    {
-      src: '/galeria/IMG-20251108-WA0009.jpg',
-      alt: '1. miejsce w turnieju Europokolenie - Mazowiecki ZPN',
-      title: '1. Miejsce w Turnieju Europokolenie',
-      tag: 'Triumf',
-      desc: 'Złote medale i okazały puchar Mazowieckiego ZPN wywalczony przez naszych zawodników.',
-      featured: false,
-    },
-    {
-      src: '/galeria/IMG-20260329-WA0005.jpg',
-      alt: 'Młodzi zawodnicy z szalikiem LKS Pniewy',
-      title: 'Duma z Barw LKS Pniewy',
-      tag: 'Klubowe Barwy',
-      desc: 'Nasi piłkarze z klubowym szalikiem, medalami i pucharami po udanych zawodach.',
-      featured: false,
-    },
-    {
-      src: '/galeria/IMG20261011113619.jpg',
-      alt: 'Mecz ligowy LKS Pniewy w Załężu Dużym',
-      title: 'Ligowe Zmagania na Murawie',
-      tag: 'Mecze Ligowe',
-      desc: 'Pamiątkowe zdjęcie po zaciętym meczu ligowym rozegranym na boisku w Załężu Dużym.',
-      featured: false,
-    },
-    {
-      src: '/galeria/IMG-20250908-WA0002.jpg',
-      alt: 'Widok z drona na stadion i boisko w Załężu Dużym',
-      title: 'Dom LKS Pniewy z Lotu Ptaka',
-      tag: 'Infrastruktura',
-      desc: 'Kompleks boisk otoczony zielenią sadów – idealne miejsce do rozwoju talentów.',
-      featured: false,
-    },
-    {
-      src: '/galeria/IMG-20251118-WA0000.jpg',
-      alt: 'Rocznik skrzatów z trenerem i medalami',
-      title: 'Radość Najmłodszych Adeptów',
-      tag: 'Akademia',
-      desc: 'Uśmiech i duma po turnieju halowym pod okiem trenera w klubowej bluzie.',
-      featured: false,
-    },
-    {
-      src: '/galeria/IMG-20250908-WA0009.jpg',
-      alt: 'Trening piłkarski na płycie głównej w Załężu Dużym',
-      title: 'Szkolenie i Pasja na Treningach',
-      tag: 'Treningi',
-      desc: 'Ćwiczenia z piłkami, drabinkami i pachołkami budujące technikę i sprawność fizyczną.',
-      featured: false,
-    },
-    {
-      src: '/galeria/IMG20260912104530.jpg',
-      alt: 'Drużyna LKS Pniewy po meczu ligowym',
-      title: 'Sportowy Szacunek i Fair Play',
-      tag: 'Drużyna',
-      desc: 'Wspólna fotografia zawodników LKS Pniewy w zielonych trykotach i gości po meczu.',
-      featured: false,
-    },
-  ];
-
   return (
     <main className={`${inder.className} min-h-screen bg-white text-neutral-900`}>
       {/* ===================== HERO SECTION ===================== */}
-      <section className="relative overflow-hidden border-b border-neutral-200 bg-white py-12 md:py-18">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden border-b border-neutral-200 py-16 md:py-24">
+        {/* Tło ze zdjęciem stadionu/boiska w Załężu Dużym */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/galeria/IMG20260929163155.jpg"
+            alt="Boisko główne LKS Pniewy"
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+          {/* Wektorowy gradient SVG - 100% odporny na usuwanie przez Dark Reader */}
+          <svg
+            className="absolute inset-0 h-full w-full pointer-events-none"
+            preserveAspectRatio="none"
+            viewBox="0 0 100 100"
+          >
+            <defs>
+              <linearGradient id="hero-overlay-horizontal" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.88" />
+                <stop offset="50%" stopColor="#ffffff" stopOpacity="0.72" />
+                <stop offset="100%" stopColor="#ffffff" stopOpacity="0.35" />
+              </linearGradient>
+              <linearGradient id="hero-overlay-vertical" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+                <stop offset="40%" stopColor="#ffffff" stopOpacity="0.0" />
+                <stop offset="100%" stopColor="#ffffff" stopOpacity="0.1" />
+              </linearGradient>
+            </defs>
+            <rect width="100" height="100" fill="url(#hero-overlay-horizontal)" />
+            <rect width="100" height="100" fill="url(#hero-overlay-vertical)" />
+          </svg>
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
             
-            {/* Tekst lewa strona */}
-            <div className="space-y-6 text-center lg:col-span-7 lg:text-left">
+            {/* Herb - na telefonie na samej górze (order-1), na komputerze po prawej (lg:order-2) */}
+            <div className="order-1 flex items-center justify-center lg:order-2 lg:col-span-5">
+              <div className="relative flex flex-col items-center rounded-2xl border border-neutral-200/90 bg-white/90 backdrop-blur-md p-6 sm:p-10 shadow-sm transition-transform duration-300 hover:shadow-md">
+                <div className="relative h-40 w-40 sm:h-52 sm:w-52 drop-shadow-xs transition-transform duration-300 hover:scale-105">
+                  <Image
+                    src="/herb.png"
+                    alt="Herb LKS Pniewy"
+                    fill
+                    priority
+                    className="object-contain"
+                  />
+                </div>
+                <div className="mt-4 sm:mt-6 text-center">
+                  <div className="flex items-center justify-center gap-1.5 text-xl sm:text-2xl font-black tracking-wider uppercase">
+                    <span className="text-green-600">LKS</span>
+                    <span className="text-red-600">PNIEWY</span>
+                  </div>
+                  <p className="mt-1 text-xs uppercase tracking-widest text-neutral-500 font-semibold">
+                    Duma Gminy Pniewy
+                  </p>
+                  <div className="mt-3 sm:mt-4 flex items-center justify-center gap-2 text-xs font-semibold text-neutral-600">
+                    <MapPin className="h-3.5 w-3.5 text-red-600" />
+                    <span>Baza sportowa: Załęże Duże</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Tekst - na telefonie pod herbem (order-2), na komputerze po lewej (lg:order-1) */}
+            <div className="order-2 space-y-6 text-center lg:order-1 lg:col-span-7 lg:text-left">
               {/* Klubowy tag */}
-              <div className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-4 py-1.5 shadow-2xs">
+              <div className="inline-flex items-center gap-2 rounded-full border border-neutral-200/90 bg-white/90 backdrop-blur-xs px-4 py-1.5 shadow-xs">
                 <span className="h-2.5 w-2.5 rounded-full bg-green-600 animate-pulse" />
-                <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-neutral-700">
+                <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-neutral-800">
                   Gminny Klub Piłkarski • Rok Zał. 2003
                 </span>
               </div>
 
               {/* Tytuł główny */}
               <div className="space-y-2">
-                <span className="block text-sm sm:text-base font-semibold uppercase tracking-widest text-neutral-500">
+                <span className="block text-sm sm:text-base font-semibold uppercase tracking-widest text-neutral-600">
                   Ludowy Klub Sportowy
                 </span>
                 <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold uppercase tracking-tight text-neutral-900 leading-none">
@@ -345,14 +338,14 @@ export default function Home() {
                 </h1>
               </div>
 
-              <p className="max-w-2xl text-base sm:text-lg text-neutral-600 leading-relaxed mx-auto lg:mx-0">
+              <p className="max-w-2xl text-base sm:text-lg text-neutral-700 leading-relaxed mx-auto lg:mx-0">
                 LKS Pniewy to serce sportowej pasji w naszej gminie. Szkolimy{' '}
                 <strong className="text-neutral-900 font-bold">140 młodych zawodników i zawodniczek</strong> z roczników{' '}
                 <strong className="text-green-700 font-bold">2011–2021</strong> w 8 prężnie rozwijających się grupach.
               </p>
 
               {/* Wyróżniony komunikat o powrocie do rozgrywek seniorskich */}
-              <div className="group relative overflow-hidden rounded-2xl border border-red-200 bg-red-50/40 p-5 shadow-2xs transition-all hover:border-red-300">
+              <div className="group relative overflow-hidden rounded-2xl border border-red-300/80 bg-white/90 backdrop-blur-xs p-5 shadow-xs transition-all hover:border-red-500 hover:shadow-md">
                 <div className="flex items-start gap-3.5">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-red-600 text-white shadow-xs">
                     <Flame className="h-5 w-5" />
@@ -372,53 +365,6 @@ export default function Home() {
                     <p className="text-xs sm:text-sm text-neutral-600 mt-0.5">
                       W przyszłym roku LKS Pniewy wystawi pierwszą drużynę seniorów, stawiając na utalentowaną młodzież z terenu Gminy Pniewy.
                     </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Przyciski CTA */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-                <Link
-                  href="/sklep"
-                  className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-red-600 px-7 py-3.5 text-sm sm:text-base font-bold uppercase tracking-wider text-white shadow-xs transition-all hover:bg-red-700 active:scale-95"
-                >
-                  <ShoppingBag className="h-4 w-4" />
-                  <span>Oficjalny Sklep Klubowy</span>
-                </Link>
-
-                <a
-                  href="#druzyny"
-                  className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-neutral-300 bg-white px-7 py-3.5 text-sm sm:text-base font-bold uppercase tracking-wider text-neutral-800 transition-all hover:border-green-600 hover:text-green-700 active:scale-95"
-                >
-                  <span>Poznaj Drużyny</span>
-                  <ArrowRight className="h-4 w-4" />
-                </a>
-              </div>
-            </div>
-
-            {/* Herb / Prawa strona */}
-            <div className="flex items-center justify-center lg:col-span-5">
-              <div className="relative flex flex-col items-center rounded-2xl border border-neutral-200 bg-neutral-50/60 p-8 sm:p-10 shadow-xs">
-                <div className="relative h-44 w-44 sm:h-52 sm:w-52 drop-shadow-xs transition-transform duration-300 hover:scale-105">
-                  <Image
-                    src="/herb.png"
-                    alt="Herb LKS Pniewy"
-                    fill
-                    priority
-                    className="object-contain"
-                  />
-                </div>
-                <div className="mt-6 text-center">
-                  <div className="flex items-center justify-center gap-1.5 text-xl sm:text-2xl font-black tracking-wider uppercase">
-                    <span className="text-green-600">LKS</span>
-                    <span className="text-red-600">PNIEWY</span>
-                  </div>
-                  <p className="mt-1 text-xs uppercase tracking-widest text-neutral-500 font-semibold">
-                    Duma Gminy Pniewy
-                  </p>
-                  <div className="mt-4 flex items-center justify-center gap-2 text-xs font-semibold text-neutral-600">
-                    <MapPin className="h-3.5 w-3.5 text-red-600" />
-                    <span>Baza sportowa: Załęże Duże</span>
                   </div>
                 </div>
               </div>
@@ -656,75 +602,60 @@ export default function Home() {
             ))}
           </div>
 
-        </div>
-      </section>
-
-      {/* ===================== GALERIA ZDJĘĆ ===================== */}
-      <section id="galeria" className="border-b border-neutral-200 bg-neutral-50/60 py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-            <div>
-              <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold uppercase tracking-widest text-green-700">
-                <Camera className="h-4 w-4" />
-                Fotorelacje & Wydarzenia
-              </span>
-              <h2 className="mt-2 text-3xl sm:text-5xl font-extrabold uppercase tracking-tight text-neutral-900">
-                Z Życia LKS Pniewy
-              </h2>
-              <p className="mt-2 text-base text-neutral-600 max-w-2xl">
-                Zobacz chwile pełne pasji, sukcesów i sportowych emocji – od codziennych treningów w Załężu Dużym po puchary zdobywane na turniejach.
-              </p>
-            </div>
-
-            <div className="mt-4 md:mt-0 flex items-center gap-2">
-              <span className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-bold uppercase tracking-wider text-neutral-700 shadow-2xs">
-                Aktualności z boiska
-              </span>
-            </div>
-          </div>
-
-          {/* Siatka galerii */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {galleryPhotos.map((item, idx) => (
-              <div
-                key={idx}
-                className={`group flex flex-col justify-between overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-2xs${
-                  item.featured ? 'md:col-span-2 lg:col-span-2' : ''
-                }`}
+          {/* Zdjęcie młodzieży w akcji pod tęczą */}
+          <div
+            className="mt-12 overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-950 shadow-sm isolate"
+            style={{ backgroundColor: '#0a0a0a', color: '#ffffff', colorScheme: 'dark' }}
+            data-darkreader-ignore=""
+          >
+            <div className="group relative h-64 sm:h-80 md:h-[420px] w-full overflow-hidden" data-darkreader-ignore="">
+              <Image
+                src="/galeria/tencza_boisko.jpg"
+                alt="Młodzi zawodnicy LKS Pniewy grający mecz na boisku w Załężu Dużym pod tęczą"
+                fill
+                className="object-cover object-center transition-transform duration-700"
+                sizes="(max-width: 1280px) 100vw, 1280px"
+              />
+              {/* Wektorowy gradient SVG - 100% odporny na wyłączanie gradientów przez Dark Reader */}
+              <svg
+                className="absolute inset-0 h-full w-full pointer-events-none"
+                preserveAspectRatio="none"
+                viewBox="0 0 100 100"
               >
-                {/* Zdjęcie */}
-                <div
-                  className={`relative overflow-hidden bg-neutral-100 ${
-                    item.featured ? 'aspect-[16/9] sm:aspect-[21/9]' : 'aspect-[4/3]'
-                  }`}
-                >
-                  <Image
-                    src={item.src}
-                    alt={item.alt}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-500"
-                  />
-                  {/* Badge na zdjęciu */}
-                  <div className="absolute top-3 left-3">
-                    <span className="rounded-md bg-white/95 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-neutral-900 shadow-xs backdrop-blur-xs">
-                      {item.tag}
-                    </span>
-                  </div>
-                </div>
+                <defs>
+                  <linearGradient id="youth-banner-overlay" x1="0%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" stopColor="#09090b" stopOpacity="0.88" />
+                    <stop offset="45%" stopColor="#09090b" stopOpacity="0.35" />
+                    <stop offset="100%" stopColor="#09090b" stopOpacity="0.0" />
+                  </linearGradient>
+                </defs>
+                <rect width="100" height="100" fill="url(#youth-banner-overlay)" />
+              </svg>
+              
+              <div className="absolute top-4 left-4 sm:top-6 sm:left-6" data-darkreader-ignore="">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur-md px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-neutral-900 shadow-xs">
+                  <Sparkles className="h-3.5 w-3.5 text-green-600" />
+                  Młodzi Zawodnicy LKS Pniewy
+                </span>
+              </div>
 
-                {/* Opis zdjęcia */}
-                <div className="p-5">
-                  <h3 className="text-base sm:text-lg font-bold uppercase tracking-tight text-neutral-900">
-                    {item.title}
+              <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 text-white flex flex-col sm:flex-row sm:items-end justify-between gap-4" data-darkreader-ignore="">
+                <div className="max-w-xl">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold uppercase tracking-tight text-white drop-shadow-sm">
+                    Pasja, walka i uśmiech na boisku
                   </h3>
-                  <p className="mt-1.5 text-xs sm:text-sm text-neutral-600 leading-relaxed">
-                    {item.desc}
+                  <p className="mt-1 text-xs sm:text-sm text-neutral-200 leading-relaxed">
+                    Każdy mecz i trening na naszym boisku w Załężu Dużym to sportowe emocje, rozwój charakteru i budowanie wspaniałej piłkarskiej przyjaźni.
                   </p>
                 </div>
+                <div className="shrink-0">
+                  <span className="inline-flex items-center gap-2 rounded-xl bg-white/15 backdrop-blur-md border border-white/25 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-xs">
+                    <Users className="h-4 w-4 text-green-400" />
+                    140 zawodników w 8 rocznikach
+                  </span>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
 
         </div>
@@ -871,6 +802,98 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===================== NASZ DOM / BOISKO W ZAŁĘŻU DUŻYM ===================== */}
+      <section id="stadion" className="border-b border-neutral-200 bg-neutral-50/60 py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            {/* Zdjęcie z lotu ptaka */}
+            <div className="lg:col-span-6">
+              <div className="group relative overflow-hidden rounded-2xl border border-neutral-200 bg-white p-2 shadow-xs transition-all hover:border-neutral-300">
+                <div className="relative aspect-4/3 w-full overflow-hidden rounded-xl">
+                  <Image
+                    src="/galeria/boisko_gora.jpg"
+                    alt="Główne boisko trawiaste LKS Pniewy w Załężu Dużym z lotu ptaka"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                  {/* Wektorowy gradient SVG - 100% odporny na usuwanie przez Dark Reader */}
+                  <svg
+                    className="absolute inset-0 h-full w-full pointer-events-none"
+                    preserveAspectRatio="none"
+                    viewBox="0 0 100 100"
+                  >
+                    <defs>
+                      <linearGradient id="stadium-overlay" x1="0%" y1="100%" x2="0%" y2="0%">
+                        <stop offset="0%" stopColor="#09090b" stopOpacity="0.75" />
+                        <stop offset="35%" stopColor="#09090b" stopOpacity="0.2" />
+                        <stop offset="100%" stopColor="#09090b" stopOpacity="0.0" />
+                      </linearGradient>
+                    </defs>
+                    <rect width="100" height="100" fill="url(#stadium-overlay)" />
+                  </svg>
+                  <div className="absolute bottom-4 left-4 right-4 text-white">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 backdrop-blur-md px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
+                      <MapPin className="h-3.5 w-3.5 text-red-400" />
+                      Załęże Duże, Gmina Pniewy
+                    </span>
+                    <p className="mt-1.5 text-xs sm:text-sm text-neutral-200 font-medium">
+                      Główne boisko z naturalną murawą – widok z lotu ptaka
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Treść */}
+            <div className="lg:col-span-6 space-y-6">
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold uppercase tracking-widest text-green-700">
+                  <Shield className="h-4 w-4" />
+                  Nasz Dom & Tradycja
+                </span>
+                <h2 className="mt-2 text-3xl sm:text-4xl font-extrabold uppercase tracking-tight text-neutral-900">
+                  Stadion LKS Pniewy w Załężu Dużym
+                </h2>
+                <p className="mt-3 text-sm sm:text-base text-neutral-600 leading-relaxed">
+                  To tutaj od początku istnienia klubu bije sportowe serce naszej gminy. Na naszym tradycyjnym boisku swoje mecze ligowe rozgrywają młodzi adepci LKS Pniewy, a już wkrótce zagra tu reaktywowana drużyna seniorów.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-2xs">
+                  <div className="flex items-center gap-2 text-green-700 font-bold text-sm uppercase tracking-wide">
+                    <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0" />
+                    <span>Boisko Główne</span>
+                  </div>
+                  <p className="mt-2 text-xs text-neutral-600 leading-relaxed">
+                    Pełnowymiarowa, naturalna murawa do rozgrywania meczów ligowych i codziennych treningów.
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-2xs">
+                  <div className="flex items-center gap-2 text-red-600 font-bold text-sm uppercase tracking-wide">
+                    <CheckCircle2 className="h-4 w-4 text-red-600 shrink-0" />
+                    <span>Boisko Boczne</span>
+                  </div>
+                  <p className="mt-2 text-xs text-neutral-600 leading-relaxed">
+                    Dedykowane do zaciętych rozgrywek i turniejów najmłodszych w kategorii Żak (5vs5).
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-xl bg-white p-4 border border-neutral-200 shadow-2xs">
+                <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+                  <strong className="text-neutral-900">Lokalizacja bazy:</strong> Załęże Duże, Gmina Pniewy. Obiekt tętni życiem od poniedziałku do weekendu dzięki treningom 8 grup młodzieżowych.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* ===================== CELE NA PRZYSZŁOŚĆ ===================== */}
       <section id="cele" className="border-b border-neutral-200 bg-neutral-50/60 py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -930,28 +953,54 @@ export default function Home() {
       {/* ===================== BANER SKLEPU KLUBOWEGO (CTA) ===================== */}
       <section className="bg-white py-16 sm:py-20 border-b border-neutral-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-2xl border border-neutral-200 bg-gradient-to-r from-red-600 to-red-700 p-8 sm:p-12 text-white shadow-sm">
-            {/* Tło herbowe */}
-            <div className="pointer-events-none absolute -right-12 -bottom-12 h-72 w-72 opacity-15">
+          <div
+            className="group relative overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-950 p-8 sm:p-12 text-white shadow-sm isolate"
+            style={{ backgroundColor: '#0a0a0a', color: '#ffffff', colorScheme: 'dark' }}
+            data-darkreader-ignore=""
+          >
+            {/* Tło ze zdjęciem drużyny */}
+            <div className="absolute inset-0 z-0">
               <Image
-                src="/herb.png"
-                alt=""
+                src="/galeria/druzyna.jpg"
+                alt="Drużyna LKS Pniewy"
                 fill
-                className="object-contain filter invert"
+                className="object-cover object-[center_55%] transition-transform duration-700 group-hover:scale-105"
+                sizes="(max-width: 1280px) 100vw, 1280px"
               />
+
+              {/* Wektorowy gradient SVG - 100% odporny na wyłączanie gradientów przez Dark Reader */}
+              <svg
+                className="absolute inset-0 h-full w-full pointer-events-none"
+                preserveAspectRatio="none"
+                viewBox="0 0 100 100"
+              >
+                <defs>
+                  <linearGradient id="shop-banner-overlay" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#09090b" stopOpacity="0.96" />
+                    <stop offset="55%" stopColor="#09090b" stopOpacity="0.82" />
+                    <stop offset="100%" stopColor="#09090b" stopOpacity="0.25" />
+                  </linearGradient>
+                  <linearGradient id="shop-banner-vertical" x1="0%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" stopColor="#09090b" stopOpacity="0.65" />
+                    <stop offset="100%" stopColor="#09090b" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <rect width="100" height="100" fill="url(#shop-banner-overlay)" />
+                <rect width="100" height="100" fill="url(#shop-banner-vertical)" />
+              </svg>
             </div>
 
-            <div className="relative max-w-2xl space-y-5">
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/20 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-xs">
+            <div className="relative z-10 max-w-2xl space-y-5" data-darkreader-ignore="">
+              <span className="inline-flex items-center gap-2 rounded-full bg-red-600 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-xs">
                 <ShoppingBag className="h-3.5 w-3.5" />
                 Oficjalne Barwy Klubowe
               </span>
 
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold uppercase tracking-tight leading-tight text-white">
-                Ubierz się w barwy <span className="text-green-300">LKS</span> PNIEWY!
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold uppercase tracking-tight leading-tight text-white drop-shadow-sm">
+                Ubierz się w barwy LKS PNIEWY!
               </h2>
 
-              <p className="text-sm sm:text-base text-white/95 leading-relaxed">
+              <p className="text-sm sm:text-base text-neutral-200 leading-relaxed drop-shadow-xs">
                 Odwiedź nasz oficjalny sklep klubowy. Znajdziesz w nim dedykowane stroje meczowe, dresy, bluzy oraz klubowe akcesoria przygotowane z myślą o zawodnikach i dumnych rodzicach.
               </p>
 
@@ -959,6 +1008,8 @@ export default function Home() {
                 <Link
                   href="/sklep"
                   className="inline-flex items-center gap-2.5 rounded-xl bg-white px-7 py-3.5 text-sm sm:text-base font-extrabold uppercase tracking-wider text-red-700 shadow-xs transition-all hover:bg-neutral-100 active:scale-95"
+                  style={{ backgroundColor: '#ffffff', color: '#b91c1c' }}
+                  data-darkreader-ignore=""
                 >
                   <span>Przejdź do sklepu</span>
                   <ArrowRight className="h-5 w-5" />
@@ -1012,11 +1063,6 @@ export default function Home() {
                   </a>
                 </li>
                 <li>
-                  <a href="#galeria" className="hover:text-white transition-colors">
-                    Galeria zdjęć
-                  </a>
-                </li>
-                <li>
                   <a href="#kadra" className="hover:text-white transition-colors">
                     Władze i Kadra
                   </a>
@@ -1024,6 +1070,11 @@ export default function Home() {
                 <li>
                   <a href="#historia" className="hover:text-white transition-colors">
                     Historia Klubu
+                  </a>
+                </li>
+                <li>
+                  <a href="#stadion" className="hover:text-white transition-colors">
+                    Stadion w Załężu Dużym
                   </a>
                 </li>
                 <li>
