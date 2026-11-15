@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { teko, inder } from '@/app/fonts';
+import { client } from '@/sanity/lib/client';
 import {
   Users,
   Trophy,
@@ -22,7 +23,55 @@ import {
   Calendar,
 } from 'lucide-react';
 
-export default function Home() {
+export const revalidate = 60; // Odświeżanie danych z Sanity co minutę
+
+interface HeroEvent {
+  title?: string;
+  badge?: string;
+  season?: string;
+  description?: string;
+  isActive?: boolean;
+}
+
+async function getHeroEvent(): Promise<HeroEvent | null> {
+  try {
+    const query = `coalesce(
+      *[_id in ["heroEvent", "drafts.heroEvent"]][0],
+      *[_type == "heroEvent"] | order(_updatedAt desc)[0]
+    ) {
+      title,
+      badge,
+      season,
+      description,
+      isActive
+    }`;
+    const data = await client.fetch<HeroEvent | null>(query);
+    return data;
+  } catch (error) {
+    console.error('Błąd pobierania wydarzenia z Sanity:', error);
+    return null;
+  }
+}
+
+export default async function Home() {
+  const sanityHeroEvent = await getHeroEvent();
+
+  const hasActiveEvent = Boolean(
+    sanityHeroEvent &&
+    sanityHeroEvent.isActive !== false &&
+    sanityHeroEvent.title &&
+    sanityHeroEvent.title.trim().length > 0
+  );
+
+  const heroEvent = hasActiveEvent
+    ? {
+        badge: sanityHeroEvent?.badge || 'Ważne wydarzenie',
+        season: sanityHeroEvent?.season || '',
+        title: sanityHeroEvent?.title || '',
+        description: sanityHeroEvent?.description || '',
+      }
+    : null;
+
   const teams = [
     {
       name: 'Rocznik 2011/12',
@@ -352,30 +401,36 @@ export default function Home() {
                   <strong className="text-green-400 font-bold">2011–2021</strong> w 8 prężnie rozwijających się grupach.
                 </p>
 
-                {/* Wyróżniony komunikat o powrocie seniorów */}
-                <div className="group relative overflow-hidden rounded-2xl border border-red-500/30 bg-[#12151D] p-5 shadow-lg transition-all">
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-red-600 text-white shadow-md">
-                      <Flame className="h-5 w-5" />
-                    </div>
-                    <div className="text-left">
-                      <div className="flex items-center gap-2">
-                        <span className="inline-block rounded-md bg-red-600 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white">
-                          Ważne wydarzenie
-                        </span>
-                        <span className="text-[11px] font-bold uppercase tracking-wider text-yellow-400">
-                          Sezon 2026/2027
-                        </span>
+                {/* Wyróżniony komunikat / Ważne wydarzenie (zarządzane z Sanity CMS) */}
+                {heroEvent && (
+                  <div className="group relative overflow-hidden rounded-2xl border border-red-500/30 bg-[#12151D] p-5 shadow-lg transition-all">
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-red-600 text-white shadow-md">
+                        <Flame className="h-5 w-5" />
                       </div>
-                      <h3 className={`${teko.className} text-xl sm:text-2xl font-bold uppercase tracking-tight text-white mt-1 leading-tight`}>
-                        Po 12 latach przerwy wracamy do rozgrywek seniorskich!
-                      </h3>
-                      <p className="text-xs text-neutral-400 mt-1 leading-relaxed">
-                        W przyszłym roku LKS Pniewy wystawi pierwszą drużynę seniorów, stawiając na utalentowaną młodzież z terenu Gminy Pniewy.
-                      </p>
+                      <div className="text-left">
+                        <div className="flex items-center gap-2">
+                          {heroEvent.badge && (
+                            <span className="inline-block rounded-md bg-red-600 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white">
+                              {heroEvent.badge}
+                            </span>
+                          )}
+                          {heroEvent.season && (
+                            <span className="text-[11px] font-bold uppercase tracking-wider text-yellow-400">
+                              {heroEvent.season}
+                            </span>
+                          )}
+                        </div>
+                        <h3 className={`${teko.className} text-xl sm:text-2xl font-bold uppercase tracking-tight text-white mt-1 leading-tight`}>
+                          {heroEvent.title}
+                        </h3>
+                        <p className="text-xs text-neutral-400 mt-1 leading-relaxed">
+                          {heroEvent.description}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
 
                 {/* Przyciski w stylu FOOTY LIVE (zielony pill button) */}
                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
