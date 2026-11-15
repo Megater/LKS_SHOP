@@ -5,8 +5,8 @@ import "./globals.css";
 import { CartProvider } from "./context/CartContext";
 
 export const metadata: Metadata = {
-  title: "LKS",
-  description: "Lks-desc",
+  title: "LKS Pniewy - Oficjalna strona i sklep klubu",
+  description: "Oficjalna strona i sklep LKS Pniewy. Gminny klub piłkarski - szkolenie dzieci i młodzieży, drużyny juniorskie i seniorskie.",
 };
 
 export default function RootLayout({
