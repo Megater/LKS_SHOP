@@ -342,7 +342,7 @@ export default async function Home() {
             <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12">
               
               {/* Herb - na telefonie na samej górze (order-1), na komputerze po prawej (lg:order-2) */}
-              <div className="order-1 flex items-center justify-center lg:order-2 lg:col-span-5">
+              <div className="hidden order-1 lg:flex items-center justify-center lg:order-2 lg:col-span-5">
                 <div className="relative flex flex-col items-center rounded-2xl border border-white/10 bg-[#11141C]/90 backdrop-blur-md p-6 sm:p-10 shadow-2xl transition-all duration-300">
                   
                   {/* Efekt poświaty herbu */}
