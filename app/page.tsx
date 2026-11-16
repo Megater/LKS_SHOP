@@ -218,8 +218,8 @@ export default async function Home() {
     },
     {
       title: 'System komunikacji',
-      before: 'Zwykły komunikator',
-      now: 'Dedykowana strona internetowa',
+      before: 'Komunikacja przez komunikator',
+      now: 'Dedykowana aplikacja do zarządzania klubem',
       icon: Smartphone,
     },
     {
@@ -578,10 +578,10 @@ export default async function Home() {
                           <ChevronRight className="h-4 w-4 rotate-90" />
                         </div>
 
-                        {/* 2026 */}
+                        {/* 2027 */}
                         <div className="flex items-center justify-between rounded-xl border border-green-500/30 bg-green-950/25 px-3.5 py-2">
                           <span className="text-[10px] font-extrabold uppercase tracking-wider text-green-400">
-                            Stan w 2026
+                            Stan w 2027
                           </span>
                           <span className="text-xs font-extrabold text-white text-right">
                             {item.now}
@@ -1134,106 +1134,6 @@ export default async function Home() {
             </div>
           </div>
         </section>
-
-        {/* ===================== STOPKA (FOOTER W STYLU FOOTY LIVE) ===================== */}
-        <footer className="bg-[#050608] text-neutral-400 py-12">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pb-10 border-b border-white/10">
-              
-              {/* Kolumna 1: O klubie */}
-              <div className="md:col-span-5 space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="relative h-11 w-11">
-                    <Image
-                      src="/herb.png"
-                      alt="Herb LKS Pniewy"
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                  <div className={`${teko.className} text-3xl font-black uppercase tracking-wider leading-none`}>
-                    <span className="text-green-400">LKS </span>
-                    <span className="text-red-500">PNIEWY</span>
-                  </div>
-                </div>
-                <p className="text-xs text-neutral-400 leading-relaxed max-w-md">
-                  Gminny klub piłkarski zrzeszający 140 młodych zawodników i zawodniczek. Rozwijamy pasję, kształtujemy charaktery i reprezentujemy Gminę Pniewy.
-                </p>
-                <div className="flex items-center gap-2 pt-1 text-xs font-bold uppercase tracking-wider text-neutral-300">
-                  <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                  <span>Zielono-Czerwoni • Załęże Duże</span>
-                </div>
-              </div>
-
-              {/* Kolumna 2: Szybkie linki */}
-              <div className="md:col-span-3 space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-white">
-                  Nawigacja
-                </h4>
-                <ul className="space-y-2 text-xs">
-                  <li>
-                    <a href="#druzyny" className="hover:text-white transition-colors">
-                      Roczniki i Trenerzy
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#rozwoj" className="hover:text-white transition-colors">
-                      Rozwój Klubu (2022–2026)
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#stadion" className="hover:text-white transition-colors">
-                      Stadion w Załężu Dużym
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#kadra" className="hover:text-white transition-colors">
-                      Władze i Kadra
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#historia" className="hover:text-white transition-colors">
-                      Historia Klubu
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#cele" className="hover:text-white transition-colors">
-                      Cele na przyszłość
-                    </a>
-                  </li>
-                  <li>
-                    <Link href="/sklep" className="text-red-400 hover:text-red-300 transition-colors font-bold">
-                      Sklep Klubowy →
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Kolumna 3: Baza sportowa */}
-              <div className="md:col-span-4 space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-white">
-                  Lokalizacja & Baza
-                </h4>
-                <p className="text-xs text-neutral-400 leading-relaxed">
-                  <strong className="text-white">Baza Główna:</strong> Załęże Duże, Gmina Pniewy
-                </p>
-                <p className="text-xs text-neutral-400 leading-relaxed">
-                  Główne boisko z naturalną murawą oraz boczne boisko do rozgrywek w kategorii żak (5vs5). W 2027 planowane otwarcie kompleksu Orlik z szatniami.
-                </p>
-              </div>
-
-            </div>
-
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-500 gap-4">
-              <p>© {new Date().getFullYear()} LKS Pniewy. Wszelkie prawa zastrzeżone.</p>
-              <div className="flex items-center gap-3">
-                <span className="h-2 w-2 rounded-full bg-green-500" />
-                <span className="text-[11px] font-bold uppercase tracking-widest text-neutral-400">Duma Gminy Pniewy</span>
-                <span className="h-2 w-2 rounded-full bg-red-500" />
-              </div>
-            </div>
-          </div>
-        </footer>
 
       </div>
     </main>

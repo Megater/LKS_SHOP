@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Navbar from "@/app/components/Navbar";
+import Footer from "@/app/components/Footer";
 import { teko } from "@/app/fonts";
 import "./globals.css";
 import { CartProvider } from "./context/CartContext";
@@ -61,7 +62,10 @@ export default function RootLayout({
       >
         <CartProvider>
           <Navbar />
-          {children}
+          <div className="flex-1 flex flex-col">
+            {children}
+          </div>
+          <Footer />
         </CartProvider>
       </body>
     </html>
