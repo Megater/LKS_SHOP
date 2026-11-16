@@ -42,7 +42,7 @@ export default function KoszykPage() {
         <div className="border-b border-white/10 pb-6 mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <span className="text-xs uppercase tracking-[0.25em] text-green-400 font-bold block mb-1">
-              Oficjalny Sklep LKS Ślesin
+              Oficjalny Sklep LKS Pniewy
             </span>
             <h1 className={`${teko.className} text-4xl sm:text-5xl font-bold uppercase tracking-wider text-white leading-none`}>
               Koszyk ({cart.length})
@@ -63,10 +63,10 @@ export default function KoszykPage() {
             {cart.map((item) => (
               <div
                 key={item.id}
-                className="bg-[#11141C] border border-white/10 rounded-2xl p-5 flex flex-col sm:flex-row gap-5 items-start sm:items-center justify-between hover:border-white/20 transition-colors"
+                className="bg-[#11141C] border border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row gap-4 sm:gap-5 items-stretch sm:items-center justify-between hover:border-white/20 transition-colors overflow-hidden"
               >
-                <div className="flex gap-4 items-center flex-1 min-w-0">
-                  <div className="relative h-20 w-20 flex-shrink-0 bg-[#0D0F16] border border-white/10 rounded-xl p-2 overflow-hidden">
+                <div className="flex gap-3.5 sm:gap-4 items-center flex-1 min-w-0 w-full">
+                  <div className="relative h-20 w-20 shrink-0 bg-[#0D0F16] border border-white/10 rounded-xl p-2 overflow-hidden">
                     <Image
                       src={item.image}
                       alt={item.name}
@@ -74,8 +74,8 @@ export default function KoszykPage() {
                       className="object-contain p-1"
                     />
                   </div>
-                  <div className="min-w-0">
-                    <h2 className="font-bold text-base sm:text-lg text-white leading-snug truncate">
+                  <div className="flex-1 min-w-0">
+                    <h2 className="font-bold text-base sm:text-lg text-white leading-snug break-words">
                       {item.name}
                     </h2>
                     {item.size && (
@@ -84,7 +84,7 @@ export default function KoszykPage() {
                       </p>
                     )}
                     {item.notes && (
-                      <p className="text-xs text-neutral-400 mt-1 max-w-md bg-black/40 border border-white/5 rounded px-2 py-1">
+                      <p className="text-xs text-neutral-400 mt-1 max-w-md bg-black/40 border border-white/5 rounded px-2 py-1 break-words">
                         <span className="text-neutral-500 font-semibold">Uwagi:</span> {item.notes}
                       </p>
                     )}
@@ -100,7 +100,7 @@ export default function KoszykPage() {
                 </div>
 
                 {/* Zmiana ilości i usuwanie */}
-                <div className="flex items-center gap-4 sm:gap-6 self-end sm:self-center shrink-0">
+                <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 w-full sm:w-auto pt-3 sm:pt-0 border-t border-white/5 sm:border-t-0 shrink-0">
                   <div className="flex items-center border border-white/15 bg-black/50 rounded-full p-0.5">
                     <button
                       onClick={() => updateQuantity(item.id, -1)}
