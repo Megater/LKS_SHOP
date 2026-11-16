@@ -7,7 +7,38 @@ import { CartProvider } from "./context/CartContext";
 
 export const metadata: Metadata = {
   title: "LKS Pniewy - Oficjalna strona i sklep klubu",
-  description: "Oficjalna strona i sklep LKS Pniewy. Gminny klub piłkarski - szkolenie dzieci i młodzieży, drużyny juniorskie i seniorskie.",
+  description: "Oficjalna strona i sklep LKS Pniewy. Gminny klub piłkarski – akademia szkolenia dzieci i młodzieży, piłka seniorska oraz oficjalny sklep klubowy. Duma Gminy Pniewy, baza w Załężu Dużym.",
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32' },
+      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
+  openGraph: {
+    title: "LKS Pniewy - Duma Gminy Pniewy",
+    description: "Oficjalna strona i sklep klubu LKS Pniewy. Akademia piłkarska, piłka seniorska i oficjalne barwy klubowe. Baza sportowa w Załężu Dużym.",
+    siteName: "LKS Pniewy",
+    locale: "pl_PL",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "LKS Pniewy - Oficjalna strona i sklep klubu",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "LKS Pniewy - Duma Gminy Pniewy",
+    description: "Oficjalna strona i sklep klubu LKS Pniewy. Akademia piłkarska, piłka seniorska i oficjalne barwy klubowe.",
+    images: ["/og-image.png"],
+  },
   other: {
     'darkreader-lock': '',
     'color-scheme': 'only dark',
