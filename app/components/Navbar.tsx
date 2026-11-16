@@ -23,6 +23,7 @@ export default function Navbar() {
       }
     };
 
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -31,6 +32,12 @@ export default function Navbar() {
   if (pathname?.startsWith('/studio')) {
     return null;
   }
+
+  // Identyfikacja aktywnej strony (od samego początku i dla wszystkich podstron):
+  const isShop = Boolean(
+    pathname?.startsWith('/sklep') || pathname?.startsWith('/koszyk')
+  );
+  const isHome = !isShop;
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#0A0C10]/95 backdrop-blur-md transition-all shadow-xl border-b border-white/10 text-white">
@@ -78,7 +85,12 @@ export default function Navbar() {
             <div className="flex items-center justify-end">
               <Link
                 href="/koszyk"
-                className="group relative flex items-center gap-2 rounded-full border border-white/15 bg-[#12151D] px-4 py-2 text-white shadow-md transition-all hover:border-green-500/50 hover:bg-[#161B26] active:scale-95"
+                aria-current={pathname?.startsWith('/koszyk') ? 'page' : undefined}
+                className={`group relative flex items-center gap-2 rounded-full border px-4 py-2 text-white shadow-md transition-all active:scale-95 ${
+                  pathname?.startsWith('/koszyk')
+                    ? 'border-green-500 bg-[#161B26] text-white shadow-green-500/10'
+                    : 'border-white/15 bg-[#12151D] hover:border-green-500/50 hover:bg-[#161B26]'
+                }`}
                 aria-label="Koszyk klubowy"
               >
                 <div className="relative">
@@ -111,8 +123,9 @@ export default function Navbar() {
           <nav className="grid grid-cols-2 gap-3 py-2.5">
             <Link
               href="/"
+              aria-current={isHome ? 'page' : undefined}
               className={`flex items-center justify-center py-2 rounded-full text-center text-xs sm:text-sm font-extrabold uppercase tracking-wider transition-all active:scale-98 ${
-                pathname === '/'
+                isHome
                   ? 'bg-green-500 text-black shadow-lg shadow-green-500/20'
                   : 'bg-[#12151D] text-neutral-300 hover:text-white hover:bg-[#161B26] border border-white/10'
               }`}
@@ -122,8 +135,9 @@ export default function Navbar() {
 
             <Link
               href="/sklep"
+              aria-current={isShop ? 'page' : undefined}
               className={`flex items-center justify-center py-2 rounded-full text-center text-xs sm:text-sm font-extrabold uppercase tracking-wider transition-all active:scale-98 ${
-                pathname === '/sklep'
+                isShop
                   ? 'bg-green-500 text-black shadow-lg shadow-green-500/20'
                   : 'bg-[#12151D] text-neutral-300 hover:text-white hover:bg-[#161B26] border border-white/10'
               }`}
